@@ -8,7 +8,12 @@ controls for unchanged, incorrect, missing, and incompatible results.
 The [native rehearsal guide](first-native-run.md) now includes a deterministic
 LibriSpeech preparation command, source provenance, and an explicit unchanged
 control. The 16-clip preparation recipe has been exercised on real source audio.
-Native model measurements and their interpretation remain outstanding.
+A small native Parakeet CPU control has also completed on the Ryzen 5 PRO 5650U
+notebook: two clips, four paired process blocks, identical transcripts, and an
+inconclusive speed verdict as expected for unchanged inputs. Its saved evidence
+was verified and recomputed on another host. A larger CPU attempt was retained
+as interrupted after its first process took five minutes. This validates the
+workflow; the representative corpus run and a known optimization remain open.
 
 The next milestones have concrete acceptance criteria:
 
