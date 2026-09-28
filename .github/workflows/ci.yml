@@ -11,10 +11,10 @@ jobs:
   core:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
         with:
-          version: "0.11.23"
+          version: "0.12.19"
           enable-cache: true
       - run: uv sync --locked
       - run: uv run ruff check .
@@ -23,17 +23,17 @@ jobs:
       - run: uv run starling-bench schemas --out schemas
       - run: git diff --exit-code -- schemas
       - run: uv build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: distributions
           path: dist/*
   harbor-contract:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
         with:
-          version: "0.11.23"
+          version: "0.12.19"
           enable-cache: true
       - run: uv sync --project integrations/harbor --locked
       - run: uv run --project integrations/harbor pytest tests/test_harbor.py
