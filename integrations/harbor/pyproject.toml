@@ -1,0 +1,12 @@
+[project]
+name = "starling-bench-harbor"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["starling-bench", "harbor"]
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[tool.uv.sources]
+starling-bench = { path = "../..", editable = true }
+harbor = { git = "https://github.com/harbor-framework/harbor.git", rev = "a38eb549b5f3c33d16ccd5c51734b0defff8399e" }

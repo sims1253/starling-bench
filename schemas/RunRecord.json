@@ -1,0 +1,208 @@
+{
+  "$defs": {
+    "Sample": {
+      "additionalProperties": false,
+      "properties": {
+        "arm": {
+          "enum": [
+            "baseline",
+            "candidate"
+          ],
+          "title": "Arm",
+          "type": "string"
+        },
+        "clip_id": {
+          "title": "Clip Id",
+          "type": "string"
+        },
+        "latency_ms": {
+          "exclusiveMinimum": 0,
+          "title": "Latency Ms",
+          "type": "number"
+        },
+        "phase": {
+          "enum": [
+            "first",
+            "warmup",
+            "warm"
+          ],
+          "title": "Phase",
+          "type": "string"
+        },
+        "repeat": {
+          "minimum": 0,
+          "title": "Repeat",
+          "type": "integer"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "arm",
+        "repeat",
+        "phase",
+        "clip_id",
+        "latency_ms",
+        "text"
+      ],
+      "title": "Sample",
+      "type": "object"
+    },
+    "Session": {
+      "additionalProperties": false,
+      "properties": {
+        "arm": {
+          "enum": [
+            "baseline",
+            "candidate"
+          ],
+          "title": "Arm",
+          "type": "string"
+        },
+        "repeat": {
+          "minimum": 0,
+          "title": "Repeat",
+          "type": "integer"
+        },
+        "reported_backend": {
+          "title": "Reported Backend",
+          "type": "string"
+        },
+        "startup_ms": {
+          "exclusiveMinimum": 0,
+          "title": "Startup Ms",
+          "type": "number"
+        },
+        "telemetry_after": {
+          "additionalProperties": true,
+          "title": "Telemetry After",
+          "type": "object"
+        },
+        "telemetry_before": {
+          "additionalProperties": true,
+          "title": "Telemetry Before",
+          "type": "object"
+        }
+      },
+      "required": [
+        "arm",
+        "repeat",
+        "startup_ms",
+        "reported_backend",
+        "telemetry_before",
+        "telemetry_after"
+      ],
+      "title": "Session",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "device_fingerprint": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Device Fingerprint",
+      "type": "string"
+    },
+    "elapsed_s": {
+      "minimum": 0,
+      "title": "Elapsed S",
+      "type": "number"
+    },
+    "failures": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Failures",
+      "type": "array"
+    },
+    "finished_at": {
+      "title": "Finished At",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "native",
+        "synthetic"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "order": {
+      "items": {
+        "maxItems": 2,
+        "minItems": 2,
+        "prefixItems": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "type": "array"
+      },
+      "title": "Order",
+      "type": "array"
+    },
+    "runner_version": {
+      "title": "Runner Version",
+      "type": "string"
+    },
+    "samples": {
+      "items": {
+        "$ref": "#/$defs/Sample"
+      },
+      "title": "Samples",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sessions": {
+      "items": {
+        "$ref": "#/$defs/Session"
+      },
+      "title": "Sessions",
+      "type": "array"
+    },
+    "spec_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Spec Sha256",
+      "type": "string"
+    },
+    "started_at": {
+      "title": "Started At",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "complete",
+        "failed",
+        "interrupted"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "runner_version",
+    "spec_sha256",
+    "kind",
+    "device_fingerprint",
+    "status",
+    "started_at",
+    "finished_at",
+    "elapsed_s",
+    "order",
+    "sessions",
+    "samples"
+  ],
+  "title": "RunRecord",
+  "type": "object"
+}

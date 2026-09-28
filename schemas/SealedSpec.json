@@ -1,0 +1,337 @@
+{
+  "$defs": {
+    "Acceptance": {
+      "additionalProperties": false,
+      "properties": {
+        "max_regression_pct": {
+          "default": 5,
+          "exclusiveMaximum": 100,
+          "minimum": 0,
+          "title": "Max Regression Pct",
+          "type": "number"
+        },
+        "max_wer_delta_pp": {
+          "default": 0.2,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Max Wer Delta Pp",
+          "type": "number"
+        },
+        "max_wer_pct": {
+          "default": 20,
+          "exclusiveMinimum": 0,
+          "title": "Max Wer Pct",
+          "type": "number"
+        },
+        "min_improvement_pct": {
+          "default": 5,
+          "exclusiveMaximum": 100,
+          "exclusiveMinimum": 0,
+          "title": "Min Improvement Pct",
+          "type": "number"
+        },
+        "require_exact_text": {
+          "default": false,
+          "title": "Require Exact Text",
+          "type": "boolean"
+        }
+      },
+      "title": "Acceptance",
+      "type": "object"
+    },
+    "Arm": {
+      "additionalProperties": false,
+      "properties": {
+        "binary": {
+          "$ref": "#/$defs/FilePin"
+        },
+        "env": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Env",
+          "type": "object"
+        },
+        "runtime_files": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FilePin"
+          },
+          "title": "Runtime Files",
+          "type": "array"
+        },
+        "source_revision": {
+          "default": "unrecorded",
+          "title": "Source Revision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "binary"
+      ],
+      "title": "Arm",
+      "type": "object"
+    },
+    "Clip": {
+      "additionalProperties": false,
+      "properties": {
+        "audio": {
+          "$ref": "#/$defs/FilePin"
+        },
+        "duration_s": {
+          "exclusiveMinimum": 0,
+          "title": "Duration S",
+          "type": "number"
+        },
+        "group": {
+          "minLength": 1,
+          "title": "Group",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "reference": {
+          "title": "Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "audio",
+        "reference",
+        "group",
+        "duration_s"
+      ],
+      "title": "Clip",
+      "type": "object"
+    },
+    "Device": {
+      "additionalProperties": false,
+      "properties": {
+        "backend": {
+          "enum": [
+            "cpu",
+            "cuda",
+            "vulkan"
+          ],
+          "title": "Backend",
+          "type": "string"
+        },
+        "fingerprint": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "label": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$",
+          "title": "Label",
+          "type": "string"
+        },
+        "observations": {
+          "additionalProperties": true,
+          "title": "Observations",
+          "type": "object"
+        }
+      },
+      "required": [
+        "label",
+        "backend",
+        "fingerprint",
+        "observations"
+      ],
+      "title": "Device",
+      "type": "object"
+    },
+    "FilePin": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size": {
+          "minimum": 0,
+          "title": "Size",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "size"
+      ],
+      "title": "FilePin",
+      "type": "object"
+    },
+    "Protocol": {
+      "additionalProperties": false,
+      "properties": {
+        "bootstrap_resamples": {
+          "default": 2000,
+          "maximum": 100000,
+          "minimum": 200,
+          "title": "Bootstrap Resamples",
+          "type": "integer"
+        },
+        "confidence": {
+          "default": 0.95,
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0.5,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "cooldown_s": {
+          "default": 0,
+          "maximum": 3600,
+          "minimum": 0,
+          "title": "Cooldown S",
+          "type": "number"
+        },
+        "repeats": {
+          "default": 8,
+          "maximum": 100,
+          "minimum": 4,
+          "title": "Repeats",
+          "type": "integer"
+        },
+        "request_timeout_s": {
+          "default": 60,
+          "exclusiveMinimum": 0,
+          "title": "Request Timeout S",
+          "type": "number"
+        },
+        "seed": {
+          "default": 1729,
+          "minimum": 0,
+          "title": "Seed",
+          "type": "integer"
+        },
+        "startup_timeout_s": {
+          "default": 120,
+          "exclusiveMinimum": 0,
+          "title": "Startup Timeout S",
+          "type": "number"
+        },
+        "warmup_requests": {
+          "default": 1,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Warmup Requests",
+          "type": "integer"
+        }
+      },
+      "title": "Protocol",
+      "type": "object"
+    },
+    "Spec": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptance": {
+          "$ref": "#/$defs/Acceptance"
+        },
+        "baseline": {
+          "$ref": "#/$defs/Arm"
+        },
+        "candidate": {
+          "$ref": "#/$defs/Arm"
+        },
+        "clips": {
+          "items": {
+            "$ref": "#/$defs/Clip"
+          },
+          "minItems": 2,
+          "title": "Clips",
+          "type": "array"
+        },
+        "device": {
+          "$ref": "#/$defs/Device"
+        },
+        "id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "default": "native",
+          "enum": [
+            "native",
+            "synthetic"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "metric": {
+          "const": "loopback_http_wav_to_text_ms_v1",
+          "default": "loopback_http_wav_to_text_ms_v1",
+          "title": "Metric",
+          "type": "string"
+        },
+        "model": {
+          "$ref": "#/$defs/FilePin"
+        },
+        "model_slug": {
+          "default": "parakeet",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$",
+          "title": "Model Slug",
+          "type": "string"
+        },
+        "normalizer": {
+          "const": "nfkc_casefold_punctuation_space_v1",
+          "default": "nfkc_casefold_punctuation_space_v1",
+          "title": "Normalizer",
+          "type": "string"
+        },
+        "protocol": {
+          "$ref": "#/$defs/Protocol"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "trust": {
+          "const": "supervised",
+          "default": "supervised",
+          "title": "Trust",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "model",
+        "device",
+        "baseline",
+        "candidate",
+        "clips"
+      ],
+      "title": "Spec",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Sha256",
+      "type": "string"
+    },
+    "spec": {
+      "$ref": "#/$defs/Spec"
+    }
+  },
+  "required": [
+    "spec",
+    "sha256"
+  ],
+  "title": "SealedSpec",
+  "type": "object"
+}

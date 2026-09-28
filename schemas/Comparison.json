@@ -1,0 +1,167 @@
+{
+  "$defs": {
+    "Interval": {
+      "additionalProperties": false,
+      "properties": {
+        "estimate": {
+          "title": "Estimate",
+          "type": "number"
+        },
+        "high": {
+          "title": "High",
+          "type": "number"
+        },
+        "low": {
+          "title": "Low",
+          "type": "number"
+        }
+      },
+      "required": [
+        "estimate",
+        "low",
+        "high"
+      ],
+      "title": "Interval",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "baseline_ms": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Baseline Ms"
+    },
+    "baseline_wer_pct": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Baseline Wer Pct"
+    },
+    "candidate_ms": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Candidate Ms"
+    },
+    "candidate_wer_pct": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Candidate Wer Pct"
+    },
+    "improvement_pct": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Interval"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "kind": {
+      "enum": [
+        "native",
+        "synthetic"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "paired_blocks": {
+      "default": 0,
+      "title": "Paired Blocks",
+      "type": "integer"
+    },
+    "quality_groups": {
+      "default": 0,
+      "title": "Quality Groups",
+      "type": "integer"
+    },
+    "reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "spec_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Spec Sha256",
+      "type": "string"
+    },
+    "speedup": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Speedup"
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "fail",
+        "inconclusive",
+        "unavailable"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    },
+    "wer_delta_pp": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Interval"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "spec_sha256",
+    "kind",
+    "verdict",
+    "reasons"
+  ],
+  "title": "Comparison",
+  "type": "object"
+}
