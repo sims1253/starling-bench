@@ -17,6 +17,7 @@ jobs:
           version: "0.11.23"
           enable-cache: true
       - run: uv sync --locked
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run pytest

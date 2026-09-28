@@ -38,6 +38,12 @@ WAV files. Paths in the corpus are relative to its JSONL file:
 Use a representative corpus for real claims; two clips only demonstrate the
 format. Keep development and final evaluation corpora separate.
 
+For a reproducible starting point, follow [the first native run guide](docs/first-native-run.md).
+`prepare-librispeech` converts an extracted official split into a seeded,
+speaker-grouped corpus and saves its provenance. `init --unchanged` creates an
+A/A control using the baseline's binary, libraries, and runtime settings in both
+arms. The guide includes archive checksums and the exercised 16-clip pilot recipe.
+
 ```bash
 uv run starling-bench doctor --device notebook --backend vulkan
 uv run starling-bench init \

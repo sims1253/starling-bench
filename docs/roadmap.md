@@ -5,6 +5,11 @@ paired warm measurements, quality gates, evidence verification, reports, and an
 optional Harbor artifact adapter. It includes a synthetic end-to-end demo and
 controls for unchanged, incorrect, missing, and incompatible results.
 
+The [native rehearsal guide](first-native-run.md) now includes a deterministic
+LibriSpeech preparation command, source provenance, and an explicit unchanged
+control. The 16-clip preparation recipe has been exercised on real source audio.
+Native model measurements and their interpretation remain outstanding.
+
 The next milestones have concrete acceptance criteria:
 
 1. **Real notebook rehearsal.** Run the unchanged native engine and a known

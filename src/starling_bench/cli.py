@@ -39,7 +39,13 @@ def parser() -> argparse.ArgumentParser:
     )
     init.add_argument("--id", required=True)
     init.add_argument("--baseline", type=Path, required=True)
-    init.add_argument("--candidate", type=Path, required=True)
+    candidate = init.add_mutually_exclusive_group(required=True)
+    candidate.add_argument("--candidate", type=Path)
+    candidate.add_argument(
+        "--unchanged",
+        action="store_true",
+        help="use the baseline and its runtime settings for both arms",
+    )
     init.add_argument("--baseline-library", type=Path, action="append", default=[])
     init.add_argument("--candidate-library", type=Path, action="append", default=[])
     init.add_argument("--baseline-env", action="append", default=[])
@@ -81,6 +87,14 @@ def parser() -> argparse.ArgumentParser:
     task.add_argument("--source", type=Path, required=True)
     task.add_argument("--revision", required=True)
     task.add_argument("--out", type=Path, required=True)
+    corpus = sub.add_parser(
+        "prepare-librispeech", help="convert a deterministic speaker subset from an extracted split"
+    )
+    corpus.add_argument("--source", type=Path, required=True)
+    corpus.add_argument("--speakers", type=int, default=8)
+    corpus.add_argument("--clips-per-speaker", type=int, default=2)
+    corpus.add_argument("--seed", type=int, default=1729)
+    corpus.add_argument("--out", type=Path, required=True)
     return p
 
 
@@ -91,8 +105,15 @@ def execute(args) -> int:
     if args.command == "doctor":
         print(identify(args.device, args.backend).model_dump_json(indent=2))
     elif args.command == "init":
+        if args.unchanged and (
+            args.candidate_library or args.candidate_env or args.candidate_revision != "unrecorded"
+        ):
+            raise BenchError("--unchanged copies baseline settings; remove candidate overrides")
         arms = {}
         for name in ("baseline", "candidate"):
+            if name == "candidate" and args.unchanged:
+                arms[name] = arms["baseline"]
+                continue
             arms[name] = Arm(
                 binary=pin(getattr(args, name)),
                 runtime_files=tuple(pin(p) for p in getattr(args, name + "_library")),
@@ -152,6 +173,17 @@ def execute(args) -> int:
 
         prepare_task(args.source, args.revision, args.out)
         print(f"Pinned Harbor CPU task: {args.out}")
+    elif args.command == "prepare-librispeech":
+        from starling_bench.librispeech import prepare_librispeech
+
+        manifest = prepare_librispeech(
+            args.source,
+            args.out,
+            speakers=args.speakers,
+            clips_per_speaker=args.clips_per_speaker,
+            seed=args.seed,
+        )
+        print(f"Prepared corpus: {manifest}")
     return 0
 
 
