@@ -39,6 +39,22 @@ def render(directory: Path, output: Path) -> None:
         if spec.kind == "synthetic"
         else "SUPERVISED EXPERIMENT · Operator-reviewed programs; no adversarial isolation claim."
     )
+
+    def runtime_identity(arm):
+        return (
+            Path(arm.binary.path).name,
+            arm.binary.sha256,
+            sorted((Path(p.path).name, p.sha256) for p in arm.runtime_files),
+            arm.env,
+        )
+
+    control_note = (
+        '<p class="notice">UNCHANGED CONTROL · Both arms declare identical program artifacts '
+        "and runtime settings. Use this result to assess measurement variability. "
+        "It does not establish an optimization.</p>"
+        if runtime_identity(spec.baseline) == runtime_identity(spec.candidate)
+        else ""
+    )
     reasons = (
         " ".join(result.reasons)
         if record.status == "complete"
@@ -75,6 +91,7 @@ tbody th{{font-weight:500}}code{{font-size:12px;overflow-wrap:anywhere}}footer{{
 border-top:2px solid var(--ink);padding-top:16px;color:var(--muted);font-size:13px}}
 </style><main><div class="brand">Starling / Bench &nbsp; · &nbsp; experiment record v1</div>
 <h1>{e(spec.id)}</h1><p class="notice">{e(note)}</p>
+{control_note}
 <p>{e(spec.device.label)} · {e(spec.device.backend.upper())} · {e(spec.model_slug)}</p>
 <div class="result"><span class="verdict">{e(result.verdict)}</span>
 <span>{e(reasons)}</span></div>

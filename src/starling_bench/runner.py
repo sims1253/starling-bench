@@ -120,7 +120,7 @@ def run(sealed: SealedSpec, directory: Path, progress=print):
                             for i in range(spec.protocol.warmup_requests)
                         ]
                         schedule += [("warm", clip) for clip in clips]
-                        for phase, clip in schedule:
+                        for request_index, (phase, clip) in enumerate(schedule, 1):
                             ms, text = server.transcribe(audio[clip.id])
                             samples.append(
                                 Sample(
@@ -131,6 +131,10 @@ def run(sealed: SealedSpec, directory: Path, progress=print):
                                     latency_ms=ms,
                                     text=text,
                                 )
+                            )
+                            progress(
+                                f"  {request_index}/{len(schedule)} {phase} {clip.id}: "
+                                f"{ms / 1000:.3f} s"
                             )
                         sessions.append(
                             Session(
